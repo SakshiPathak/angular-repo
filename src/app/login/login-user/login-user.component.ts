@@ -37,7 +37,8 @@ export class LoginUserComponent {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = "Login failed. Please check your credentials.";
+          this.errorMessage =
+            err.message || "Login failed. Please check your credentials.";
           console.error("Login error", err);
         },
       });

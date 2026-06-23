@@ -1,7 +1,9 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import { Observable, throwError } from "rxjs";
+import { tap } from "rxjs/operators";
 import { LoginResponse } from "../interfaces/login.interface";
 import { encryptPassword } from "../utils/encryption.util";
 
@@ -10,8 +12,14 @@ import { encryptPassword } from "../utils/encryption.util";
 })
 export class AuthService {
   private baseUrl = environment.BASE_URL;
+  private isBrowser: boolean;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) platformId: Object,
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   login(
     emailId: string,
@@ -41,14 +49,16 @@ export class AuthService {
   }
 
   autoAuthenticate(): Observable<any> {
-    const token = localStorage.getItem("accessToken");
+    // const token = localStorage.getItem("accessToken");
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+    // const headers = new HttpHeaders({
+    //   Authorization: `Bearer ${token}`,
+    // });
 
-    return this.http.get(`${this.baseUrl}/api/auth/autoAuthenticate`, {
-      headers,
-    });
+    // return this.http.get(`${this.baseUrl}/api/auth/autoAuthenticate`, {
+    //   headers,
+    // });
+
+    return this.http.get(`${this.baseUrl}/api/auth/autoAuthenticate`);
   }
 }
