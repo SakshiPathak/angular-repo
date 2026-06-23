@@ -1,10 +1,12 @@
 import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { Router } from "@angular/router";
+import { CookieService } from "ngx-cookie-service";
 import { catchError, throwError } from "rxjs";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
+  const cookieService = inject(CookieService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -20,7 +22,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           case 401:
             message =
               error.error?.message || "Session expired. Please login again.";
-            localStorage.removeItem("accessToken");
+            // localStorage.removeItem("accessToken");
+            cookieService.delete("accessToken");
             router.navigate(["/login"]);
             break;
           case 403:

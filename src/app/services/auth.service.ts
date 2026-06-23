@@ -6,6 +6,7 @@ import { Observable, throwError } from "rxjs";
 import { tap } from "rxjs/operators";
 import { LoginResponse } from "../interfaces/login.interface";
 import { encryptPassword } from "../utils/encryption.util";
+import { CookieService } from "ngx-cookie-service";
 
 @Injectable({
   providedIn: "root",
@@ -16,6 +17,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private cookieService: CookieService,
     @Inject(PLATFORM_ID) platformId: Object,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -40,7 +42,12 @@ export class AuthService {
         tap((response) => {
           const token = response?.data?.accessToken;
           if (token) {
-            localStorage.setItem("accessToken", token);
+            // localStorage.setItem("accessToken", token);
+            this.cookieService.set("accessToken", token, {
+              path: "/",
+              secure: true,
+              sameSite: "Strict",
+            });
           } else {
             console.error("No accessToken found in login response", response);
           }
@@ -59,6 +66,11 @@ export class AuthService {
     //   headers,
     // });
 
+    // no manual header needed anymore — authInterceptor attaches it automatically
     return this.http.get(`${this.baseUrl}/api/auth/autoAuthenticate`);
+  }
+
+  getAppConfig(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/app-config`);
   }
 }
