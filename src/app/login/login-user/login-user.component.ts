@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, NgForm } from "@angular/forms";
 import { NgIf } from "@angular/common";
 
 @Component({
@@ -23,7 +23,12 @@ export class LoginUserComponent {
     private router: Router,
   ) {}
 
-  onSubmit(): void {
+  onSubmit(loginForm: NgForm): void {
+    if (loginForm.invalid) {
+      loginForm.form.markAllAsTouched();
+      return;
+    }
+
     this.errorMessage = "";
     this.isLoading = true;
 
@@ -43,4 +48,25 @@ export class LoginUserComponent {
         },
       });
   }
+
+  // onSubmit(): void {
+  //   this.errorMessage = "";
+  //   this.isLoading = true;
+
+  //   this.authService
+  //     .login(this.emailId, this.password, this.rememberMe)
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.isLoading = false;
+  //         console.log("Login Successful", response);
+  //         this.router.navigate(["/dashboard"]);
+  //       },
+  //       error: (err) => {
+  //         this.isLoading = false;
+  //         this.errorMessage =
+  //           err.message || "Login failed. Please check your credentials.";
+  //         console.error("Login error", err);
+  //       },
+  //     });
+  // }
 }

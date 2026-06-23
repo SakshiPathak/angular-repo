@@ -9,7 +9,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   // Calls the API to verify the stored token is still valid
   return authService.autoAuthenticate().pipe(
-    map(() => true), // oken valid -> allow access (user is "auto logged in")
+    map(() => true), // Token valid -> allow access (user is "auto logged in")
     catchError(() => {
       // token invalid/expired -> send back to login
       router.navigate(["/login"]);

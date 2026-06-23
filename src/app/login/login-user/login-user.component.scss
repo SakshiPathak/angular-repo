@@ -1,0 +1,7 @@
+@use '../../../styles.scss' as global;
+
+.error-message {
+    color: global.$error-color;
+    font-size: 0.85rem;
+    margin: 4px 0 12px;
+}
