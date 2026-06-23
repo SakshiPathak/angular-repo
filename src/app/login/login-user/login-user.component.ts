@@ -33,7 +33,7 @@ export class LoginUserComponent {
         next: (response) => {
           this.isLoading = false;
           console.log("Login Successful", response);
-          this.router.navigate(["/register"]);
+          this.router.navigate(["/dashboard"]);
         },
         error: (err) => {
           this.isLoading = false;

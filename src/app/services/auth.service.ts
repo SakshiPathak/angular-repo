@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
 import { LoginResponse } from "../interfaces/login.interface";
 import { encryptPassword } from "../utils/encryption.util";
@@ -30,8 +30,25 @@ export class AuthService {
       .post<LoginResponse>(`${this.baseUrl}/api/auth/login`, body)
       .pipe(
         tap((response) => {
-          localStorage.setItem("accessToken", response?.data?.accessToken);
+          const token = response?.data?.accessToken;
+          if (token) {
+            localStorage.setItem("accessToken", token);
+          } else {
+            console.error("No accessToken found in login response", response);
+          }
         }),
       );
+  }
+
+  autoAuthenticate(): Observable<any> {
+    const token = localStorage.getItem("accessToken");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get(`${this.baseUrl}/api/auth/autoAuthenticate`, {
+      headers,
+    });
   }
 }
