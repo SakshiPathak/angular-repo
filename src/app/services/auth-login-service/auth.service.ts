@@ -1,11 +1,11 @@
 import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { tap } from "rxjs/operators";
-import { LoginResponse } from "../interfaces/login.interface";
-import { encryptPassword } from "../utils/encryption.util";
+import { LoginResponse } from "../../interfaces/login.interface";
+import { encryptPassword } from "../../utils/encryption.util";
 import { CookieService } from "ngx-cookie-service";
 
 @Injectable({
