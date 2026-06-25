@@ -7,7 +7,9 @@ import { CookieService } from "ngx-cookie-service";
 const SKIP_AUTH_URLS = ["/api/auth/login", "/api/app-config"];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const shouldSkip = SKIP_AUTH_URLS.some((url) => req.url.includes(url));
+  const isSisRequest = req.url.includes("dev-sis-api.bttcollege.com");
+  const shouldSkip =
+    isSisRequest || SKIP_AUTH_URLS.some((url) => req.url.includes(url));
 
   if (shouldSkip) return next(req);
 

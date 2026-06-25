@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth-login-service/auth.service";
+import { MicrosoftService } from "../../services/microsoft-login-service/microsoft.service";
 
 @Component({
   selector: "app-dashboard-user",
@@ -9,7 +10,10 @@ import { AuthService } from "../../services/auth-login-service/auth.service";
   styleUrl: "./dashboard-user.component.scss",
 })
 export class DashboardUserComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private microsoftService: MicrosoftService,
+  ) {}
 
   ngOnInit(): void {
     this.authService.getAppConfig().subscribe({
@@ -19,6 +23,11 @@ export class DashboardUserComponent implements OnInit {
       error: (err) => {
         console.error("Failed to load app config", err);
       },
+    });
+
+    this.microsoftService.getCurrentUser().subscribe({
+      next: (user) => console.log("Microsoft current user -->", user),
+      error: (err) => console.error("Failed to fetch /auth/me", err),
     });
   }
 }
