@@ -29,5 +29,10 @@ export class DashboardUserComponent implements OnInit {
       next: (user) => console.log("Microsoft current user -->", user),
       error: (err) => console.error("Failed to fetch /auth/me", err),
     });
+
+    this.microsoftService.getAllUsers().subscribe({
+      next: (users) => console.log("All Users -->", users),
+      error: (err) => console.log("Failed to fetch users", err),
+    });
   }
 }

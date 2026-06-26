@@ -24,4 +24,10 @@ export class MicrosoftService {
       withCredentials: true,
     });
   }
+
+  getAllUsers(): Observable<any> {
+    return this.http.get(`${this.sisBaseUrl}/users`, {
+      withCredentials: true,
+    });
+  }
 }
